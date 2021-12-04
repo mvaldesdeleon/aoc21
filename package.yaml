@@ -29,6 +29,7 @@ dependencies:
 - req
 - directory
 - bytestring
+- attoparsec
 - mtl
 - vector
 - containers
