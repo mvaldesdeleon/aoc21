@@ -3,6 +3,8 @@ module DayXX
   )
 where
 
-dayXX :: String -> IO (String, String)
+import Relude
+
+dayXX :: Text -> IO (String, String)
 dayXX input = do
   return ("N/A", "N/A")

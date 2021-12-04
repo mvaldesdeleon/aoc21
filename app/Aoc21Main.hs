@@ -11,8 +11,7 @@ import Network.HTTP.Req ((/:))
 import qualified Network.HTTP.Req as R
 import qualified Options.Applicative as OA
 import Paths_aoc21 (getDataFileName)
-import Relude.File (writeFileBS)
-import Relude.String (decodeUtf8, toText)
+import Relude
 import Session (session)
 import System.Directory (doesFileExist)
 
@@ -25,19 +24,19 @@ dayId day = show $ toInteger (fromEnum day) + 1
 inputFilePath :: Day -> IO FilePath
 inputFilePath day = getDataFileName ("inputs/day-" <> dayId day <> ".txt")
 
-loadInput :: Day -> IO String
+loadInput :: Day -> IO Text
 loadInput day = do
   filepath <- inputFilePath day
   cached <- doesFileExist filepath
   if cached
     then do
       putStrLn "Using input file from cache"
-      readFile filepath
+      readFileText filepath
     else do
       putStrLn "Downloading input file"
       downloadAndSave day filepath
 
-downloadAndSave :: Day -> FilePath -> IO String
+downloadAndSave :: Day -> FilePath -> IO Text
 downloadAndSave day filepath = R.runReq R.defaultHttpConfig $ do
   response <- R.req R.GET (R.https "adventofcode.com" /: "2021" /: "day" /: toText (dayId day) /: "input") R.NoReqBody R.bsResponse (R.header "cookie" ("session=" <> session))
   let status = R.responseStatusCode response

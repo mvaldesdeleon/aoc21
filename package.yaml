@@ -23,13 +23,8 @@ data-files:
 description:         Please see the README on GitHub at <https://github.com/mvaldesdeleon/aoc21#readme>
 
 dependencies:
-- name: base
-  version: ">= 4.7 && < 5"
-  mixin:
-    - hiding (Prelude)
-- name: relude
-  mixin:
-    - (Relude as Prelude), relude
+- base >= 4.7 && < 5
+- relude
 - optparse-applicative
 - req
 - directory
@@ -49,6 +44,7 @@ ghc-options:
 - -Wredundant-constraints
 
 default-extensions:
+- NoImplicitPrelude
 - OverloadedStrings
 
 library:
