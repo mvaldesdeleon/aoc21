@@ -1,0 +1,82 @@
+name:                aoc21
+version:             0.1.0.0
+github:              "mvaldesdeleon/aoc21"
+license:             BSD3
+author:              "Martin Valdes de Leon"
+maintainer:          "m.valdesdeleon@gmail.com"
+copyright:           "Copyright (c) 2021 Martin Valdes de Leon"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+data-files:
+- inputs/*.txt
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/mvaldesdeleon/aoc21#readme>
+
+dependencies:
+- name: base
+  version: ">= 4.7 && < 5"
+  mixin:
+    - hiding (Prelude)
+- name: relude
+  mixin:
+    - (Relude as Prelude), relude
+- optparse-applicative
+- req
+- directory
+- bytestring
+- mtl
+- vector
+- containers
+- lens
+- monad-loops
+- split
+
+ghc-options:
+#- -Wall
+- -Wcompat
+- -Wincomplete-record-updates
+- -Wincomplete-uni-patterns
+- -Wredundant-constraints
+
+default-extensions:
+- OverloadedStrings
+
+library:
+  source-dirs: src
+  generated-other-modules: Paths_aoc21
+
+executables:
+  aoc21:
+    main:                Aoc21Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    - -main-is Aoc21Main
+    - -O2
+    dependencies:
+    - aoc21
+    other-modules:
+    - Paths_aoc21
+
+tests:
+  aoc21-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - aoc21

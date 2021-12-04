@@ -1,0 +1,9 @@
+.stack-work/
+.vscode/
+aoc21.cabal
+src/Session.hs
+*~
+*.hi
+*.o
+*.dyn*
+.DS_Store
