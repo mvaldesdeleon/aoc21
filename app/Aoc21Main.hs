@@ -14,7 +14,7 @@ import qualified Options.Applicative as OA
 import Paths_aoc21 (getDataFileName)
 import Relude
 import Session (session)
-import System.Directory (doesFileExist)
+import System.Directory (canonicalizePath, doesFileExist)
 
 data Day = Day1 | Day2 | Day3 | Day4 | Day5
   deriving (Show, Enum)
@@ -62,9 +62,19 @@ versionOption = OA.infoOption "1.0" (OA.short 'v' <> OA.long "version" <> OA.hel
 
 main :: IO ()
 main = do
-  day <- OA.execParser (OA.info options (OA.fullDesc <> OA.progDesc "Runs the challenges for the given day" <> OA.header "Advent of Code 2021"))
+  (showPath, inputPath, day) <- OA.execParser (OA.info options (OA.fullDesc <> OA.progDesc "Runs the challenges for the given day" <> OA.header "Advent of Code 2021"))
   putStrLn $ "Running day " <> dayId day
-  input <- loadInput day
+  let manualInput = inputPath /= ""
+  inputPath' <- canonicalizePath inputPath
+  when showPath $ do
+    path <- inputFilePath day
+    putStrLn $ "Input file path: " <> path
+  when manualInput $ do
+    putStrLn $ "Override input file path: " <> inputPath'
+  input <-
+    if manualInput
+      then readFileText inputPath'
+      else loadInput day
   (part1, part2) <- case day of
     Day1 -> day1 input
     Day2 -> day2 input
@@ -74,4 +84,6 @@ main = do
   putStrLn $ "Part 1: " <> part1
   putStrLn $ "Part 2: " <> part2
   where
-    options = dayOption <**> versionOption <**> OA.helper
+    options = (,,) <$> pathOption <*> inputOption <*> dayOption <**> versionOption <**> OA.helper
+    pathOption = OA.switch (OA.long "show-path" <> OA.help "Show the input file path")
+    inputOption = OA.strOption (OA.long "input" <> OA.help "Override the input file" <> OA.value "")
