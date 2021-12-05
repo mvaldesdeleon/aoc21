@@ -22,9 +22,24 @@ You should have [stack](https://docs.haskellstack.org/en/stable/README/) install
 ```sh
 git clone git@github.com:mvaldesdeleon/aoc21.git
 cd aoc21
+# Create the Session module
+cat << EOF > src/Session.hs
+module Session where
+
+import Relude.String (ByteString)
+
+session :: ByteString
+session = "<YOUR SESSION COOKIE HERE>"
+EOF
 stack build
-stack exec aoc21 day[1-4]
+stack exec aoc21 day[1-5]
 # i.e., stack exec aoc21 day1
+```
+
+You can also override the input file for testing:
+
+```sh
+stack exec aoc21 day1 --input alternative/input.txt
 ```
 
 # Live Stream
