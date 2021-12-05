@@ -7,6 +7,7 @@ import Day1 (day1)
 import Day2 (day2)
 import Day3 (day3)
 import Day4 (day4)
+import Day5 (day5)
 import Network.HTTP.Req ((/:))
 import qualified Network.HTTP.Req as R
 import qualified Options.Applicative as OA
@@ -15,7 +16,7 @@ import Relude
 import Session (session)
 import System.Directory (doesFileExist)
 
-data Day = Day1 | Day2 | Day3 | Day4
+data Day = Day1 | Day2 | Day3 | Day4 | Day5
   deriving (Show, Enum)
 
 dayId :: Day -> String
@@ -52,6 +53,7 @@ dayOption =
       <> pureCommand "day2" "Day 2: Dive!" Day2
       <> pureCommand "day3" "Day 3: Binary Diagnostic" Day3
       <> pureCommand "day4" "Day 4: Giant Squid" Day4
+      <> pureCommand "day5" "Day 5: Hydrothermal Venture" Day5
 
 pureCommand :: String -> String -> a -> OA.Mod OA.CommandFields a
 pureCommand cmd desc val = OA.command cmd (OA.info (pure val) (OA.progDesc desc))
@@ -68,6 +70,7 @@ main = do
     Day2 -> day2 input
     Day3 -> day3 input
     Day4 -> day4 input
+    Day5 -> day5 input
   putStrLn $ "Part 1: " <> part1
   putStrLn $ "Part 2: " <> part2
   where
