@@ -86,4 +86,4 @@ main = do
   where
     options = (,,) <$> pathOption <*> inputOption <*> dayOption <**> versionOption <**> OA.helper
     pathOption = OA.switch (OA.long "show-path" <> OA.help "Show the input file path")
-    inputOption = OA.strOption (OA.long "input" <> OA.help "Override the input file" <> OA.value "")
+    inputOption = OA.strOption (OA.long "input" <> OA.help "Override the input file path" <> OA.metavar "PATH" <> OA.value "")
