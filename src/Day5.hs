@@ -68,11 +68,11 @@ range :: (Ord a, Enum a) => a -> a -> [a]
 range a b = if a <= b then [a, succ a .. b] else [a, pred a .. b]
 
 day5 :: Text -> IO (String, String)
-day5 input = do
+day5 input =
   let vents = parseInput input
       axisAligned = filter ((||) <$> ventVertical <*> ventHorizontal) vents
       floor = foldl' trackVent M.empty axisAligned
       overlapping = M.filter (> 1) floor
       floor' = foldl' trackVent M.empty vents
       overlapping' = M.filter (> 1) floor'
-  return (show $ M.size overlapping, show $ M.size overlapping')
+   in return (show $ M.size overlapping, show $ M.size overlapping')

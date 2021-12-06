@@ -69,10 +69,10 @@ findRating rating report = go 0 report
             refined -> go (bitPosition + 1) refined
 
 day3 :: Text -> IO (String, String)
-day3 input = do
+day3 input =
   let report = parseInput input
       gammaBin = gammaRate report
       epsilonBin = complement gammaBin
       o2rating = findRating O2Generator report
       co2rating = findRating CO2Scrubber report
-  return (show $ readBin gammaBin * readBin epsilonBin, show $ readBin o2rating * readBin co2rating)
+   in return (show $ readBin gammaBin * readBin epsilonBin, show $ readBin o2rating * readBin co2rating)

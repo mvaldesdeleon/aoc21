@@ -67,8 +67,8 @@ parseInput input =
     parseBoard = Board <$> ((optional (char ' ') *> decimal) `sepBy1'` char ' ') `sepBy1` endOfLine
 
 day4 :: Text -> IO (String, String)
-day4 input = do
+day4 input =
   let (numbers, boards) = parseInput input
       score = playBingo numbers boards
       score' = lastWinner numbers boards
-  return (show score, show score')
+   in return (show score, show score')
