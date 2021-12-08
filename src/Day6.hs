@@ -48,8 +48,8 @@ countLanternfish :: M.Map (Lanternfish a) Integer -> Integer
 countLanternfish = M.foldl' (+) 0
 
 day6 :: Text -> IO (String, String)
-day6 input = do
+day6 input =
   let school = parseInput input
       part1 = iterate generation school !! 80
       part2 = countLanternfish $ iterate generation' (buildFloor school) !! 256
-  return (show $ length part1, show $ part2)
+   in return (show $ length part1, show $ part2)
