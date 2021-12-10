@@ -54,8 +54,8 @@ decode display =
     contains big small = all (`elem` big) small
 
 day8 :: Text -> IO (String, String)
-day8 input = do
+day8 input =
   let displays = parseInput input
       part1 = length . concatMap (filter (`elem` [2, 3, 4, 7]) . _dValue . fmap length) $ displays
       part2 = sum . fmap decode $ displays
-  return (show $ part1, show $ part2)
+   in return (show $ part1, show $ part2)
