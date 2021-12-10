@@ -48,6 +48,7 @@ ghc-options:
 default-extensions:
 - NoImplicitPrelude
 - OverloadedStrings
+- LambdaCase
 
 library:
   source-dirs: src
