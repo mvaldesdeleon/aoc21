@@ -33,6 +33,7 @@ dependencies:
 - containers
 - lens
 - array
+- template-haskell
 - mtl
 - vector
 - monad-loops

@@ -1,3 +1,5 @@
+{-# LANGUAGE TemplateHaskell #-}
+
 module Aoc21Main where
 
 import Control.Applicative ((<**>))
@@ -6,6 +8,7 @@ import qualified Data.ByteString as BS
 import Day1 (day1)
 import Day10 (day10)
 import Day11 (day11)
+import Day12 (day12)
 import Day2 (day2)
 import Day3 (day3)
 import Day4 (day4)
@@ -21,9 +24,9 @@ import Paths_aoc21 (getDataFileName)
 import Relude
 import Session (session)
 import System.Directory (canonicalizePath, doesFileExist)
+import TH (makeDayC, makeDayT)
 
-data Day = Day1 | Day2 | Day3 | Day4 | Day5 | Day6 | Day7 | Day8 | Day9 | Day10 | Day11
-  deriving (Show, Enum)
+makeDayT 12 -- data Day = Day1 | Day2 | ...
 
 dayId :: Day -> String
 dayId day = show $ toInteger (fromEnum day) + 1
@@ -66,6 +69,7 @@ dayOption =
       <> pureCommand "day9" "Day 9: Smoke Basin" Day9
       <> pureCommand "day10" "Day 10: Syntax Scoring" Day10
       <> pureCommand "day11" "Day 11: Dumbo Octopus" Day11
+      <> pureCommand "day12" "Day 12: TBA" Day12
 
 pureCommand :: String -> String -> a -> OA.Mod OA.CommandFields a
 pureCommand cmd desc val = OA.command cmd (OA.info (pure val) (OA.progDesc desc))
@@ -87,18 +91,8 @@ main = do
     if manualInput
       then readFileText inputPath'
       else loadInput day
-  (part1, part2) <- case day of
-    Day1 -> day1 input
-    Day2 -> day2 input
-    Day3 -> day3 input
-    Day4 -> day4 input
-    Day5 -> day5 input
-    Day6 -> day6 input
-    Day7 -> day7 input
-    Day8 -> day8 input
-    Day9 -> day9 input
-    Day10 -> day10 input
-    Day11 -> day11 input
+  (part1, part2) <-
+    $(makeDayC 12) day input
   putStrLn $ "Part 1: " <> part1
   putStrLn $ "Part 2: " <> part2
   where

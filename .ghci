@@ -1,3 +1,4 @@
+:set -XNoImplicitPrelude
 import Relude
 :def hoogle \x -> return $ ":!stack hoogle -- \"" ++ x ++ "\""
 :def doc \x -> return $ ":!stack hoogle -- --info \"" ++ x ++ "\""
