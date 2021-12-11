@@ -24,9 +24,9 @@ import Paths_aoc21 (getDataFileName)
 import Relude
 import Session (session)
 import System.Directory (canonicalizePath, doesFileExist)
-import TH (makeDayC, makeDayT)
+import TH (makeDayC, makeDayT, makeTOC)
 
-makeDayT 12 -- data Day = Day1 | Day2 | ...
+makeDayT -- data Day = Day1 | Day2 | ...
 
 dayId :: Day -> String
 dayId day = show $ toInteger (fromEnum day) + 1
@@ -58,18 +58,7 @@ downloadAndSave day filepath = R.runReq R.defaultHttpConfig $ do
 dayOption :: OA.Parser Day
 dayOption =
   OA.subparser $
-    pureCommand "day1" "Day 1: Sonar Sweep" Day1
-      <> pureCommand "day2" "Day 2: Dive!" Day2
-      <> pureCommand "day3" "Day 3: Binary Diagnostic" Day3
-      <> pureCommand "day4" "Day 4: Giant Squid" Day4
-      <> pureCommand "day5" "Day 5: Hydrothermal Venture" Day5
-      <> pureCommand "day6" "Day 6: Lanternfish" Day6
-      <> pureCommand "day7" "Day 7: The Treachery of Whales" Day7
-      <> pureCommand "day8" "Day 8: Seven Segment Search" Day8
-      <> pureCommand "day9" "Day 9: Smoke Basin" Day9
-      <> pureCommand "day10" "Day 10: Syntax Scoring" Day10
-      <> pureCommand "day11" "Day 11: Dumbo Octopus" Day11
-      <> pureCommand "day12" "Day 12: TBA" Day12
+    foldMap (\(c, t, d) -> pureCommand c t d) $(makeTOC)
 
 pureCommand :: String -> String -> a -> OA.Mod OA.CommandFields a
 pureCommand cmd desc val = OA.command cmd (OA.info (pure val) (OA.progDesc desc))
@@ -92,7 +81,7 @@ main = do
       then readFileText inputPath'
       else loadInput day
   (part1, part2) <-
-    $(makeDayC 12) day input
+    $(makeDayC) day input
   putStrLn $ "Part 1: " <> part1
   putStrLn $ "Part 2: " <> part2
   where
