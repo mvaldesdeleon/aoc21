@@ -5,6 +5,7 @@ import Control.Monad (when)
 import qualified Data.ByteString as BS
 import Day1 (day1)
 import Day10 (day10)
+import Day11 (day11)
 import Day2 (day2)
 import Day3 (day3)
 import Day4 (day4)
@@ -21,7 +22,7 @@ import Relude
 import Session (session)
 import System.Directory (canonicalizePath, doesFileExist)
 
-data Day = Day1 | Day2 | Day3 | Day4 | Day5 | Day6 | Day7 | Day8 | Day9 | Day10
+data Day = Day1 | Day2 | Day3 | Day4 | Day5 | Day6 | Day7 | Day8 | Day9 | Day10 | Day11
   deriving (Show, Enum)
 
 dayId :: Day -> String
@@ -64,6 +65,7 @@ dayOption =
       <> pureCommand "day8" "Day 8: Seven Segment Search" Day8
       <> pureCommand "day9" "Day 9: Smoke Basin" Day9
       <> pureCommand "day10" "Day 10: Syntax Scoring" Day10
+      <> pureCommand "day11" "Day 11: Dumbo Octopus" Day11
 
 pureCommand :: String -> String -> a -> OA.Mod OA.CommandFields a
 pureCommand cmd desc val = OA.command cmd (OA.info (pure val) (OA.progDesc desc))
@@ -96,6 +98,7 @@ main = do
     Day8 -> day8 input
     Day9 -> day9 input
     Day10 -> day10 input
+    Day11 -> day11 input
   putStrLn $ "Part 1: " <> part1
   putStrLn $ "Part 2: " <> part2
   where
