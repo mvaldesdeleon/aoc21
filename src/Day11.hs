@@ -92,7 +92,18 @@ countFlashes os steps = runST $ do
   grid <- makeGrid os
   replicateM (fromInteger steps) (step grid)
 
+syncAfter :: [Octopus] -> Integer
+syncAfter os = runST $ do
+  grid <- makeGrid os
+  stepUntilFlash grid 0
+  where
+    stepUntilFlash grid count = do
+      flashing <- step grid
+      if flashing == toInteger (rangeSize (gridStart, gridEnd))
+        then return $ count + 1
+        else stepUntilFlash grid (count + 1)
+
 day11 :: Text -> IO (String, String)
 day11 input = do
   let octopi = parseInput input
-  return (show $ sum $ countFlashes octopi 100, "N/A")
+  return (show $ sum $ countFlashes octopi 100, show $ syncAfter octopi)
