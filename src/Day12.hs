@@ -4,6 +4,7 @@ module Day12
 where
 
 import Data.Attoparsec.Text
+import qualified Data.List as L
 import qualified Data.Map.Strict as M
 import Relude
 
@@ -13,6 +14,10 @@ data Key = Big String | Small String
 isBig :: Key -> Bool
 isBig (Big _) = True
 isBig _ = False
+
+isSmall :: Key -> Bool
+isSmall (Small _) = True
+isSmall _ = False
 
 kStart, kEnd :: Key
 kStart = Small "start"
@@ -62,7 +67,23 @@ countPaths (CaveSystem caveMap) = go [kStart]
               next = filter ((||) <$> isBig <*> (`notElem` path)) $ _cNext cave
            in sum (map (go . (: path)) next)
 
+countPaths' :: CaveSystem -> Integer
+countPaths' (CaveSystem caveMap) = go [kStart]
+  where
+    go [] = 0
+    go path@(current : rest) =
+      if current == kEnd
+        then 1
+        else
+          let cave = caveMap M.! current
+              next = filter (canBeRevisited path) $ _cNext cave
+           in sum (map (go . (: path)) next)
+    canBeRevisited path next = isBig next || (next /= kStart && onlyOneSmallDuplicate (next : path))
+    onlyOneSmallDuplicate path =
+      let smallCaves = filter isSmall path
+       in length smallCaves - length (L.nub smallCaves) <= 1
+
 day12 :: Text -> IO (String, String)
 day12 input = do
   let caveSystem = parseInput input
-  return (show $ countPaths caveSystem, "N/A")
+  return (show $ countPaths caveSystem, show $ countPaths' caveSystem)
