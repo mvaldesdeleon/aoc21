@@ -23,7 +23,7 @@ challenges =
     "Day 9: Smoke Basin",
     "Day 10: Syntax Scoring",
     "Day 11: Dumbo Octopus",
-    "Day 12: TBA"
+    "Day 12: Passage Pathing"
   ]
 
 makeDayT :: Q [Dec]
