@@ -104,6 +104,6 @@ syncAfter os = runST $ do
         else stepUntilFlash grid (count + 1)
 
 day11 :: Text -> IO (String, String)
-day11 input = do
+day11 input =
   let octopi = parseInput input
-  return (show $ sum $ countFlashes octopi 100, show $ syncAfter octopi)
+   in return (show $ sum $ countFlashes octopi 100, show $ syncAfter octopi)

@@ -76,8 +76,8 @@ parseInput :: Text -> [String]
 parseInput = map toString . words
 
 day10 :: Text -> IO (String, String)
-day10 input = do
+day10 input =
   let lines = parseInput input
       results = map parseLine lines
       autocomplete = sort . filter (/= 0) . map score' $ results
-  return (show $ sum . map score $ results, show $ autocomplete L.!! ((length autocomplete - 1) `div` 2))
+   in return (show $ sum . map score $ results, show $ autocomplete L.!! ((length autocomplete - 1) `div` 2))
