@@ -76,14 +76,14 @@ countPaths' (CaveSystem caveMap) = go [kStart]
         then 1
         else
           let cave = caveMap M.! current
-              next = filter (canBeRevisited path) $ _cNext cave
+              next = filter (canBeVisited path) $ _cNext cave
            in sum (map (go . (: path)) next)
-    canBeRevisited path next = isBig next || (next /= kStart && onlyOneSmallDuplicate (next : path))
+    canBeVisited path next = isBig next || (next /= kStart && onlyOneSmallDuplicate (next : path))
     onlyOneSmallDuplicate path =
       let smallCaves = filter isSmall path
        in length smallCaves - length (L.nub smallCaves) <= 1
 
 day12 :: Text -> IO (String, String)
-day12 input = do
+day12 input =
   let caveSystem = parseInput input
-  return (show $ countPaths caveSystem, show $ countPaths' caveSystem)
+   in return (show $ countPaths caveSystem, show $ countPaths' caveSystem)
