@@ -24,7 +24,8 @@ challenges =
     "Day 10: Syntax Scoring",
     "Day 11: Dumbo Octopus",
     "Day 12: Passage Pathing",
-    "Day 13: Transparent Origami"
+    "Day 13: Transparent Origami",
+    "Day 14: Extended Polymerization"
   ]
 
 makeDayT :: Q [Dec]
