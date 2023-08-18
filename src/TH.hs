@@ -41,7 +41,7 @@ makeDayC :: Q Exp
 makeDayC = do
   return $ LamCaseE (map makeDayM [1 .. length challenges])
   where
-    makeDayM i = Match (ConP (mkName $ "Day" ++ show i) []) (NormalB (VarE (mkName $ "day" ++ show i))) []
+    makeDayM i = Match (ConP (mkName $ "Day" ++ show i) [] []) (NormalB (VarE (mkName $ "day" ++ show i))) []
 
 makeTOC :: Q Exp
 makeTOC = do
