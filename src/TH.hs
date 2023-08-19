@@ -25,7 +25,8 @@ challenges =
     "Day 11: Dumbo Octopus",
     "Day 12: Passage Pathing",
     "Day 13: Transparent Origami",
-    "Day 14: Extended Polymerization"
+    "Day 14: Extended Polymerization",
+    "Day 15: Chiton"
   ]
 
 makeDayT :: Q [Dec]

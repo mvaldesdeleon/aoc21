@@ -39,6 +39,7 @@ dependencies:
 - vector
 - monad-loops
 - split
+- pqueue
 
 ghc-options:
 #- -Wall
