@@ -13,17 +13,33 @@ type Pair = (Char, Char)
 mkPairs :: [Char] -> [Pair]
 mkPairs cs = zip cs (drop 1 cs)
 
-unPairs :: [Pair] -> [Char]
-unPairs ps = fst (L.head ps) : map snd ps
+type Composition = M.Map Pair Integer
+
+addToMap :: (Ord k, Num v) => k -> v -> M.Map k v -> M.Map k v
+addToMap = M.insertWith (+)
+
+data Polymer = Polymer
+  { _pFirst :: Char,
+    _pComposition :: Composition
+  }
+  deriving (Show)
+
+parseTemplate :: Parser Polymer
+parseTemplate = do
+  cs <- manyTill letter endOfLine
+  return
+    $ Polymer
+      { _pFirst = L.head cs,
+        _pComposition = foldl' initialize M.empty (mkPairs cs)
+      }
+  where
+    initialize composition pair = addToMap pair 1 composition
+
+type Rule = (Pair, (Pair, Pair))
 
 type Rules = M.Map Pair (Pair, Pair)
 
-parseTemplate :: Parser [Pair]
-parseTemplate = do
-  cs <- manyTill letter endOfLine
-  return $ mkPairs cs
-
-parseRule :: Parser (Pair, (Pair, Pair))
+parseRule :: Parser Rule
 parseRule = do
   a <- letter
   b <- letter
@@ -34,29 +50,30 @@ parseRule = do
 parseRules :: Parser Rules
 parseRules = M.fromList <$> parseRule `sepBy1` endOfLine
 
-parseInput :: Text -> ([Pair], Rules)
+parseInput :: Text -> (Polymer, Rules)
 parseInput input =
   case parseOnly ((,) <$> parseTemplate <* endOfLine <*> parseRules) input of
     Right res -> res
     Left err -> error $ toText err
 
-polymerize :: Rules -> [Pair] -> [Pair]
-polymerize rules = foldMap (insert rules)
+polymerize :: Rules -> Polymer -> Polymer
+polymerize rules start = start {_pComposition = M.foldlWithKey polymerizeStep M.empty (_pComposition start)}
   where
-    insert rules pair =
+    polymerizeStep composition pair count =
       case M.lookup pair rules of
-        Just (pa, pb) -> [pa, pb]
-        Nothing -> [pair]
+        Just (pairA, pairB) -> addToMap pairA count . addToMap pairB count $ composition
+        Nothing -> addToMap pair count composition
 
-part1 :: String -> Integer
-part1 polymer =
-  let counts = sort . map length . group . sort $ polymer
-   in toInteger (L.last counts - L.head counts)
+result :: Polymer -> Integer
+result polymer =
+  let elementCount = M.foldlWithKey countPair (M.insert (_pFirst polymer) 1 M.empty) (_pComposition polymer)
+      counts = snd <$> M.toList elementCount
+   in L.maximum counts - L.minimum counts
+  where
+    countPair elementCount pair count = addToMap (snd pair) count elementCount
 
 day14 :: Text -> IO (String, String)
 day14 input = do
-  let (template, rules) = parseInput input
-      polymers = iterate (polymerize rules) template
-      step10 = unPairs (polymers L.!! 10)
-      step40 = unPairs (polymers L.!! 40)
-  return (show $ part1 step10, show $ part1 step40)
+  let (polymer, rules) = parseInput input
+      sequence = iterate (polymerize rules) polymer
+  return (show $ result (sequence L.!! 10), show $ result (sequence L.!! 40))
