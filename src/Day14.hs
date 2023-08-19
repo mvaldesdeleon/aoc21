@@ -66,7 +66,7 @@ polymerize rules start = start {_pComposition = M.foldlWithKey polymerizeStep M.
 
 result :: Polymer -> Integer
 result polymer =
-  let elementCount = M.foldlWithKey countPair (M.insert (_pFirst polymer) 1 M.empty) (_pComposition polymer)
+  let elementCount = M.foldlWithKey countPair (M.singleton (_pFirst polymer) 1) (_pComposition polymer)
       counts = snd <$> M.toList elementCount
    in L.maximum counts - L.minimum counts
   where
