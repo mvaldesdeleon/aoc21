@@ -43,7 +43,7 @@ loadInput day = do
   if cached
     then do
       putStrLn "Using input file from cache"
-      readFileText filepath
+      decodeUtf8 <$> readFileBS filepath
     else do
       putStrLn "Downloading input file"
       downloadAndSave day filepath
@@ -59,8 +59,8 @@ downloadAndSave day filepath = R.runReq R.defaultHttpConfig $ do
 
 dayOption :: OA.Parser Day
 dayOption =
-  OA.subparser $
-    foldMap (\(c, t, d) -> pureCommand c t d) $(makeTOC)
+  OA.subparser
+    $ foldMap (\(c, t, d) -> pureCommand c t d) $(makeTOC)
 
 pureCommand :: String -> String -> a -> OA.Mod OA.CommandFields a
 pureCommand cmd desc val = OA.command cmd (OA.info (pure val) (OA.progDesc desc))
@@ -80,7 +80,7 @@ main = do
     putStrLn $ "Override input file path: " <> inputPath'
   input <-
     if manualInput
-      then readFileText inputPath'
+      then decodeUtf8 <$> readFileBS inputPath'
       else loadInput day
   (part1, part2) <-
     $(makeDayC) day input
